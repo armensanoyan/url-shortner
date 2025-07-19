@@ -32,6 +32,7 @@ export default function Home() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [authData, setAuthData] = useState({ email: '', password: '', firstName: '', lastName: '' });
+  const [authErrors, setAuthErrors] = useState<string[]>([]);
 
   const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -139,6 +140,7 @@ export default function Home() {
 
   const handleAuth = async (type: 'login' | 'register') => {
     try {
+      setAuthErrors([]); // Clear previous errors
       const endpoint = type === 'login' ? '/auth/login' : '/auth/register';
       const response = await axios.post(`${API_BASE}${endpoint}`, {
         email: authData.email,
@@ -152,11 +154,20 @@ export default function Home() {
       setShowLogin(false);
       setShowRegister(false);
       setAuthData({ email: '', password: '', firstName: '', lastName: '' });
+      setAuthErrors([]);
       toast.success(`${type === 'login' ? 'Logged in' : 'Registered'} successfully!`);
       fetchUrls();
     } catch (error: any) {
-      const message = error.response?.data?.message || `Failed to ${type}`;
-      toast.error(message);
+      const responseData = error.response?.data;
+      
+      if (responseData?.errors && Array.isArray(responseData.errors)) {
+        // Store validation errors for display in modal
+        const errors = responseData.errors.map((err: any) => `${err.field}: ${err.message}`);
+        setAuthErrors(errors);
+      } else {
+        const message = responseData?.message || `Failed to ${type}`;
+        setAuthErrors([message]);
+      }
     }
   };
 
@@ -390,6 +401,19 @@ export default function Home() {
                   />
                 </div>
                 
+                {/* Error Display */}
+                {authErrors.length > 0 && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 dark:bg-red-900/20 dark:border-red-800">
+                    <div className="text-sm text-red-600 dark:text-red-400">
+                      {authErrors.map((error, index) => (
+                        <div key={index} className="mb-1 last:mb-0">
+                          • {error}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
                 <div className="flex gap-3 pt-4">
                   <button
                     onClick={() => handleAuth(showLogin ? 'login' : 'register')}
@@ -402,6 +426,7 @@ export default function Home() {
                       setShowLogin(false);
                       setShowRegister(false);
                       setAuthData({ email: '', password: '', firstName: '', lastName: '' });
+                      setAuthErrors([]);
                     }}
                     className="px-4 py-2 text-gray-600 bg-gray-100 font-medium rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
                   >

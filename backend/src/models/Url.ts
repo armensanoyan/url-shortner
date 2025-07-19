@@ -62,17 +62,11 @@ Url.init(
     originalUrl: {
       type: DataTypes.TEXT,
       allowNull: false,
-      validate: {
-        isUrl: true,
-      },
       field: 'originalUrl',
     },
     title: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        len: [0, 255],
-      },
     },
     description: {
       type: DataTypes.TEXT,

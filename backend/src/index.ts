@@ -4,7 +4,6 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import { sequelize } from './config/database';
-import { initializeDatabase } from './utils/databaseInit';
 import healthRouter from './routes/health';
 
 // Load environment variables
@@ -23,9 +22,6 @@ app.use(express.urlencoded({ extended: true }));
 // Start server
 const startServer = async () => {
   try {
-    // Initialize database (create if not exists, run migrations)
-    await initializeDatabase();
-    
     // Test database connection
     await sequelize.authenticate();
     console.log('Database connection established successfully.');

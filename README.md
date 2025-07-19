@@ -26,6 +26,7 @@ url-shortner/
 │   ├── package.json
 │   ├── tsconfig.json
 │   ├── Dockerfile
+│   ├── MIGRATIONS.md       # Backend migration documentation
 │   └── env.example
 ├── frontend/               # Next.js application
 │   ├── src/
@@ -37,7 +38,13 @@ url-shortner/
 │   ├── next.config.js
 │   ├── Dockerfile
 │   └── env.example
+├── init/                   # Database initialization
+│   ├── migrations/         # SQL migration files
+│   │   └── 001-init.sql   # Initial database schema
+│   └── run-migrations.sh  # Migration execution script
 ├── docker-compose.yml      # Docker orchestration
+├── DATABASE_SETUP.md       # Database setup documentation
+├── MIGRATION_GUIDE.md      # Comprehensive migration guide
 ├── .dockerignore
 └── README.md
 ```
@@ -62,10 +69,16 @@ url-shortner/
    docker-compose up --build
    ```
 
+   This will automatically:
+   - Start PostgreSQL database
+   - Run all SQL migrations
+   - Start the backend application
+   - Start the frontend application
+
 3. Access the application:
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:3001
-   - Database: localhost:5432
+   - Database: localhost:5431 (mapped from container port 5432)
 
 ### Local Development
 
@@ -82,14 +95,13 @@ url-shortner/
    cp env.example .env.local
    ```
 
-2. Start PostgreSQL database (using Docker):
+2. Start PostgreSQL database and run migrations (using Docker):
    ```bash
-   docker run --name url-shortener-db \
-     -e POSTGRES_DB=url_shortener \
-     -e POSTGRES_USER=postgres \
-     -e POSTGRES_PASSWORD=password \
-     -p 5432:5432 \
-     -d postgres:15-alpine
+   # Start database and run migrations
+   docker-compose up postgres migrate
+   
+   # Or start everything
+   docker-compose up
    ```
 
 3. Start the backend:
@@ -111,10 +123,10 @@ url-shortner/
 NODE_ENV=development
 PORT=3001
 DB_HOST=localhost
-DB_PORT=5432
+DB_PORT=5431
 DB_USER=postgres
 DB_PASSWORD=password
-DB_NAME=url_shortener
+DB_NAME=test
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
 ```
 
@@ -184,10 +196,21 @@ docker-compose down
 # View logs
 docker-compose logs -f
 
+# View specific service logs
+docker-compose logs -f migrate
+docker-compose logs -f backend
+
 # Access specific service
 docker-compose exec backend sh
 docker-compose exec frontend sh
-docker-compose exec postgres psql -U postgres -d url_shortener
+docker-compose exec postgres psql -U postgres -d test
+
+# Run migrations only
+docker-compose run --rm migrate
+
+# Reset database (WARNING: This will delete all data)
+docker-compose down -v
+docker-compose up
 ```
 
 ## Contributing

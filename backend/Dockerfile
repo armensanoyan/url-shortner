@@ -12,11 +12,7 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml* ./
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
-
-# Copy entrypoint script first and set permissions
-COPY docker-entrypoint.sh ./
-RUN chmod +x docker-entrypoint.sh && ls -la docker-entrypoint.sh
+RUN pnpm install
 
 # Copy rest of source code
 COPY . .
@@ -26,9 +22,6 @@ RUN pnpm run build
 
 # Expose port
 EXPOSE 3001
-
-# Use entrypoint script with explicit shell
-ENTRYPOINT ["/bin/sh", "./docker-entrypoint.sh"]
 
 # Start the application
 CMD ["pnpm", "start"] 

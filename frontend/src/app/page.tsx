@@ -33,6 +33,7 @@ export default function Home() {
   const [showRegister, setShowRegister] = useState(false);
   const [authData, setAuthData] = useState({ email: '', password: '', firstName: '', lastName: '' });
   const [authErrors, setAuthErrors] = useState<string[]>([]);
+  const [urlErrors, setUrlErrors] = useState<string[]>([]);
 
   const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -83,16 +84,17 @@ export default function Home() {
 
   const shortenUrl = async () => {
     if (!originalUrl.trim()) {
-      toast.error('Please enter a URL');
+      setUrlErrors(['Please enter a URL']);
       return;
     }
 
     if (!validateUrl(originalUrl)) {
-      toast.error('Please enter a valid URL');
+      setUrlErrors(['Please enter a valid URL']);
       return;
     }
 
     setLoading(true);
+    setUrlErrors([]); // Clear previous errors
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(`${API_BASE}/api/urls`, {
@@ -107,10 +109,19 @@ export default function Home() {
       setUrls(prev => [newUrl, ...prev]);
       setOriginalUrl('');
       setCustomSlug('');
+      setUrlErrors([]);
       toast.success('URL shortened successfully!');
     } catch (error: any) {
-      const message = error.response?.data?.message || 'Failed to shorten URL';
-      toast.error(message);
+      const responseData = error.response?.data;
+      
+      if (responseData?.errors && Array.isArray(responseData.errors)) {
+        // Store validation errors for display in form
+        const errors = responseData.errors.map((err: any) => `${err.field}: ${err.message}`);
+        setUrlErrors(errors);
+      } else {
+        const message = responseData?.message || 'Failed to shorten URL';
+        setUrlErrors([message]);
+      }
     } finally {
       setLoading(false);
     }
@@ -256,6 +267,19 @@ export default function Home() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 />
               </div>
+              
+              {/* Error Display */}
+              {urlErrors.length > 0 && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 dark:bg-red-900/20 dark:border-red-800">
+                  <div className="text-sm text-red-600 dark:text-red-400">
+                    {urlErrors.map((error, index) => (
+                      <div key={index} className="mb-1 last:mb-0">
+                        • {error}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               
               <button
                 onClick={shortenUrl}

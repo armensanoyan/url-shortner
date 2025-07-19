@@ -1,0 +1,31 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      ts-alias:
+        specifier: 0.0.7
+        version: 0.0.7
+
+packages:
+
+  json5@2.2.3:
+    resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
+    engines: {node: '>=6'}
+    hasBin: true
+
+  ts-alias@0.0.7:
+    resolution: {integrity: sha512-N4lWQLgmb873yQWqWIdHM+CMRIq+bfqFyme+CZ324RSL7hKOfVrg7GtUgkBSJyIEw8w+byN+ZI0mkB7PRp6XwA==}
+
+snapshots:
+
+  json5@2.2.3: {}
+
+  ts-alias@0.0.7:
+    dependencies:
+      json5: 2.2.3

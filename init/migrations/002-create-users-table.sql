@@ -1,27 +1,25 @@
+
 -- Create users table
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   email VARCHAR(255) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
-  first_name VARCHAR(50),
-  last_name VARCHAR(50),
-  is_active BOOLEAN NOT NULL DEFAULT true,
-  last_login_at TIMESTAMP,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  "firstName" VARCHAR(255),
+  "lastName" VARCHAR(255),
+  "isActive" BOOLEAN NOT NULL DEFAULT true,
+  "lastLoginAt" TIMESTAMP WITH TIME ZONE,
+  "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create index on email for faster lookups
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 
--- Create index on is_active for filtering active users
-CREATE INDEX IF NOT EXISTS idx_users_is_active ON users(is_active);
-
--- Add trigger to automatically update updated_at timestamp
+-- Add trigger to automatically update updatedAt timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.updated_at = CURRENT_TIMESTAMP;
+    NEW."updatedAt" = CURRENT_TIMESTAMP;
     RETURN NEW;
 END;
 $$ language 'plpgsql';

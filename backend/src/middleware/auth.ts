@@ -25,7 +25,6 @@ export const authenticateToken = async (
 ): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
-    console.log({authHeader});
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
     if (!token) {
@@ -51,7 +50,7 @@ export const authenticateToken = async (
     const user = await User.findByPk(decoded.userId, {
       attributes: { exclude: ['password'] }
     });
-    // console.log({user});
+
     if (!user || !user.isActive) {
       res.status(401).json({ 
         success: false, 

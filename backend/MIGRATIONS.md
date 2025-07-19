@@ -58,7 +58,7 @@ The project uses SQL-based migrations located in `init/migrations/`:
 
 ### urls Table
 - `id` - Primary key (SERIAL)
-- `original_url` - The original long URL (TEXT, NOT NULL)
+- `originalUrl` - The original long URL (TEXT, NOT NULL)
 - `short_url` - The shortened URL code (TEXT, NOT NULL)
 - `created_at` - Timestamp when URL was created (TIMESTAMP, DEFAULT NOW())
 

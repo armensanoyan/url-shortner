@@ -43,7 +43,7 @@ The `migrate` service performs the following tasks in order:
 
 ### urls Table
 - `id` - Primary key (SERIAL)
-- `original_url` - The original long URL (TEXT, NOT NULL)
+- `originalUrl` - The original long URL (TEXT, NOT NULL)
 - `short_url` - The shortened URL code (TEXT, NOT NULL)
 - `created_at` - Timestamp when URL was created (TIMESTAMP, DEFAULT NOW())
 

@@ -6,7 +6,10 @@ import dotenv from 'dotenv';
 import { sequelize } from './config/database';
 import healthRouter from './routes/health';
 import authRouter from './routes/auth';
+import urlRouter from './routes/urls';
 import User from './models/User';
+import Url from './models/Url';
+import { redirectToUrlPublic } from './controllers/urlController';
 
 // Load environment variables
 dotenv.config();
@@ -54,3 +57,9 @@ app.use('/health', healthRouter);
 
 // Authentication routes
 app.use('/auth', authRouter);
+
+// URL management routes
+app.use('/api/urls', urlRouter);
+
+// URL redirect route (must be last to catch all slugs)
+app.get('/:slug', redirectToUrlPublic);

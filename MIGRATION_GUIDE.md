@@ -252,7 +252,7 @@ FOREIGN KEY (parent_id) REFERENCES parent_table(id) ON DELETE CASCADE;
 ALTER TABLE users ADD CONSTRAINT IF NOT EXISTS unique_user_email UNIQUE (email);
 
 -- Add check constraint
-ALTER TABLE urls ADD CONSTRAINT IF NOT EXISTS valid_url CHECK (original_url LIKE 'http%');
+ALTER TABLE urls ADD CONSTRAINT IF NOT EXISTS valid_url CHECK (originalUrl LIKE 'http%');
 ```
 
 ## Troubleshooting Migrations

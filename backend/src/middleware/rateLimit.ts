@@ -88,4 +88,23 @@ export const passwordChangeRateLimiter = rateLimit({
       retryAfter: Math.ceil(req.rateLimit?.resetTime ? (req.rateLimit.resetTime - Date.now()) / 1000 : 900)
     });
   }
+});
+
+// Rate limiter for URL creation and updates
+export const urlRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // Limit each IP to 20 URL operations per 15 minutes
+  message: {
+    success: false,
+    message: 'Too many URL operations, please try again later'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req: Request, res: Response) => {
+    res.status(429).json({
+      success: false,
+      message: 'Too many URL operations, please try again later',
+      retryAfter: Math.ceil(req.rateLimit?.resetTime ? (req.rateLimit.resetTime - Date.now()) / 1000 : 900)
+    });
+  }
 }); 

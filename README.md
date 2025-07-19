@@ -152,8 +152,13 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 
 ### URL Shortener Endpoints
 - `POST /api/urls` - Create short URL
-- `GET /api/urls` - List all URLs
-- `GET /:slug` - Redirect to original URL
+- `GET /api/urls` - List all URLs (with pagination, search, sorting)
+- `GET /api/urls/:id` - Get specific URL
+- `PUT /api/urls/:id` - Update URL
+- `DELETE /api/urls/:id` - Delete URL
+- `GET /api/urls/:id/analytics` - Get URL analytics
+- `GET /api/urls/dashboard/stats` - Get dashboard statistics
+- `GET /:slug` - Redirect to original URL (public)
 
 ## Features
 
@@ -162,18 +167,21 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 - [x] Unique slug generation
 - [x] URL redirection
 - [x] 404 handling
-- [x] URL listing
+- [x] URL listing with pagination, search, and sorting
 - [x] User authentication
 - [x] JWT-based session management
 - [x] Password hashing with bcrypt
 - [x] Rate limiting for security
 - [x] Input validation
 - [x] Account management
-- [ ] URL validation
-- [ ] Copy to clipboard
-- [ ] Custom slugs
-- [ ] Visit tracking
-- [ ] Analytics dashboard
+- [x] URL validation
+- [x] Custom slugs
+- [x] Visit tracking
+- [x] Analytics dashboard
+- [x] URL expiration
+- [x] Soft delete functionality
+- [ ] Copy to clipboard (frontend)
+- [ ] Frontend UI implementation
 
 ## Development
 
@@ -184,6 +192,7 @@ pnpm run dev      # Start development server
 pnpm run build    # Build for production
 pnpm run start    # Start production server
 node test-auth.js # Test authentication endpoints
+node test-urls.js # Test URL shortener endpoints
 node test-zod-validation.js # Test Zod validation
 ```
 
@@ -248,6 +257,34 @@ The application now includes a comprehensive authentication system with the foll
 - **Password Security**: Bcrypt hashing with 12 salt rounds
 - **Rate Limiting**: Protection against brute force attacks
 - **Input Validation**: Comprehensive validation using Zod schemas
+
+## URL Shortener
+
+The application includes a complete URL shortener system with the following features:
+
+- **URL Creation**: Create shortened URLs with optional custom slugs
+- **URL Management**: Full CRUD operations for URLs (Create, Read, Update, Delete)
+- **Visit Tracking**: Automatic tracking of URL visits and analytics
+- **Custom Slugs**: Support for custom slugs with collision detection
+- **URL Expiration**: Optional expiration dates for URLs
+- **Search & Filtering**: Advanced search and filtering capabilities
+- **Pagination**: Efficient pagination for large URL lists
+- **Analytics Dashboard**: Comprehensive analytics and statistics
+- **Rate Limiting**: Protection against abuse with configurable limits
+- **Soft Delete**: Safe deletion with data preservation
+
+### URL Features
+
+- **Automatic Slug Generation**: Random 6-character slugs when no custom slug is provided
+- **Slug Validation**: Ensures slugs are unique and follow proper format
+- **URL Validation**: Validates original URLs and adds protocol if missing
+- **Visit Counting**: Tracks total visits and last visit timestamp
+- **User Association**: Links URLs to user accounts for management
+- **Expiration Support**: Optional expiration dates with automatic deactivation
+- **Search Functionality**: Search across slug, URL, title, and description
+- **Sorting Options**: Sort by creation date, update date, visit count, etc.
+
+For detailed API documentation, see [backend/URL_API_README.md](backend/URL_API_README.md).
 - **Account Management**: Profile updates, password changes, account deactivation
 
 For detailed authentication documentation, see [backend/AUTHENTICATION.md](backend/AUTHENTICATION.md).

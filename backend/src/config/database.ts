@@ -11,7 +11,7 @@ const config = {
     host: process.env.DB_HOST ,
     port: parseInt(process.env.DB_PORT || '5432'),
     dialect: 'postgres',
-    logging: console.log
+    logging: false
   },
   test: {
     username: process.env.DB_USER ,
@@ -46,7 +46,7 @@ export const sequelize = new Sequelize({
     min: 0,
     acquire: 30000,
     idle: 10000
-  }
+  },
 });
 
 // Export config for Sequelize CLI

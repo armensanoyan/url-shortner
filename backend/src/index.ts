@@ -5,6 +5,8 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import { sequelize } from './config/database';
 import healthRouter from './routes/health';
+import authRouter from './routes/auth';
+import User from './models/User';
 
 // Load environment variables
 dotenv.config();
@@ -26,6 +28,11 @@ const startServer = async () => {
     await sequelize.authenticate();
     console.log('Database connection established successfully.');
     
+    // Sync database models
+    // TODO: Remove alter: true in production
+    // await sequelize.sync({ alter: true });
+    // console.log('Database models synchronized.');
+    
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
@@ -44,3 +51,6 @@ app.get('/', (req: Request, res: Response) => {
 
 // Health check routes
 app.use('/health', healthRouter);
+
+// Authentication routes
+app.use('/auth', authRouter);

@@ -137,8 +137,20 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 
 ## API Endpoints
 
+### Public Endpoints
 - `GET /` - Health check
 - `GET /health` - API status
+- `POST /auth/register` - User registration
+- `POST /auth/login` - User login
+- `POST /auth/logout` - User logout
+
+### Protected Endpoints (require authentication)
+- `GET /auth/profile` - Get user profile
+- `PUT /auth/profile` - Update user profile
+- `PUT /auth/change-password` - Change password
+- `DELETE /auth/deactivate` - Deactivate account
+
+### URL Shortener Endpoints
 - `POST /api/urls` - Create short URL
 - `GET /api/urls` - List all URLs
 - `GET /:slug` - Redirect to original URL
@@ -151,12 +163,16 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 - [x] URL redirection
 - [x] 404 handling
 - [x] URL listing
-- [ ] User authentication
+- [x] User authentication
+- [x] JWT-based session management
+- [x] Password hashing with bcrypt
+- [x] Rate limiting for security
+- [x] Input validation
+- [x] Account management
 - [ ] URL validation
 - [ ] Copy to clipboard
 - [ ] Custom slugs
 - [ ] Visit tracking
-- [ ] Rate limiting
 - [ ] Analytics dashboard
 
 ## Development
@@ -167,6 +183,8 @@ cd backend
 pnpm run dev      # Start development server
 pnpm run build    # Build for production
 pnpm run start    # Start production server
+node test-auth.js # Test authentication endpoints
+node test-zod-validation.js # Test Zod validation
 ```
 
 ### Frontend Commands
@@ -220,6 +238,30 @@ docker-compose up
 3. Make your changes
 4. Add tests if applicable
 5. Submit a pull request
+
+## Authentication
+
+The application now includes a comprehensive authentication system with the following features:
+
+- **User Registration & Login**: Secure user account creation and authentication
+- **JWT Tokens**: Stateless authentication using JSON Web Tokens
+- **Password Security**: Bcrypt hashing with 12 salt rounds
+- **Rate Limiting**: Protection against brute force attacks
+- **Input Validation**: Comprehensive validation using Zod schemas
+- **Account Management**: Profile updates, password changes, account deactivation
+
+For detailed authentication documentation, see [backend/AUTHENTICATION.md](backend/AUTHENTICATION.md).
+
+### Quick Test
+
+To test the authentication system:
+
+```bash
+cd backend
+node test-auth.js
+```
+
+This will run a series of tests to verify all authentication endpoints are working correctly.
 
 ## License
 

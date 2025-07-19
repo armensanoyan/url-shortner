@@ -1,0 +1,2 @@
+export const MAX_REQUEST_ATTEMPTS = process.env.MAX_REQUEST_ATTEMPTS ? parseInt(process.env.MAX_REQUEST_ATTEMPTS) : 3;
+export const WINDOW_MS = process.env.WINDOW_MS ? parseInt(process.env.WINDOW_MS) : 60*60*1000;

@@ -36,7 +36,8 @@ The `migrate` service performs the following tasks in order:
 
 ### users Table
 - `id` - Primary key (SERIAL)
-- `username` - User's username (TEXT, NOT NULL)
+- `firstName` - User's firstName (TEXT, NOT NULL)
+- `lastName` - User's lastName (TEXT, NOT NULL)
 - `email` - User's email address (TEXT, NOT NULL)
 - `password` - Hashed password (TEXT, NOT NULL)
 - `created_at` - Timestamp when user was created (TIMESTAMP, DEFAULT NOW())

@@ -8,7 +8,9 @@ import {
 } from 'sequelize-typescript';
 import { User } from '../../auth/entities/auth.entity';
 
-@Table
+@Table({
+  tableName: 'urls',
+})
 export class Url extends Model {
   @Column({
     type: DataType.STRING,

@@ -6,13 +6,12 @@ import {
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { AuthRepository } from './auth.repository';
-import { checkUserPassword } from 'src/utils/auth.util';
+import { checkUserPassword, generateToken } from 'src/utils/auth.util';
 import { hashPassword } from 'src/utils/auth.util';
 import { plainToInstance } from 'class-transformer';
 import { UserResponseDto } from './dto/user-response.dto';
 import { LoginResponseDto } from './dto/auth-response.dto';
 import { User } from './entities/auth.entity';
-import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -21,12 +20,6 @@ export class AuthService {
   private transformUser(user: User): UserResponseDto {
     return plainToInstance(UserResponseDto, user, {
       excludeExtraneousValues: true,
-    });
-  }
-
-  private generateToken(user: User): string {
-    return jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: '1d',
     });
   }
 
@@ -59,7 +52,7 @@ export class AuthService {
     await this.authRepository.updateLastLogin(user.id);
 
     return {
-      token: this.generateToken(user),
+      token: generateToken(user),
     };
   }
 }
